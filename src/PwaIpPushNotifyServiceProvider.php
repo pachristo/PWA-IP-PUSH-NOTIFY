@@ -13,6 +13,11 @@ class PwaIpPushNotifyServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
+        // Register Blade component
+        $this->loadViewComponentsAs('pwa-push', [
+            \Pachristo\PwaIpPushNotify\Components\Modal::class,
+        ]);
+
         $this->publishes([
             __DIR__.'/../public'       => public_path('pwa-push'),
             __DIR__.'/../resources/views' => resource_path('views/vendor/pwa-push'),
