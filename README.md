@@ -91,10 +91,17 @@ Add the following to your layout file (e.g., `resources/views/layouts/app.blade.
     <!-- OR use the view directly -->
     {{-- @include('pwa-push::components.modal') --}}
     
-    <!-- Service Worker Registration (included in modal, no need to add separately) -->
+    <!-- IMPORTANT: Scripts stack (required for modal JavaScript) -->
+    @stack('scripts')
 </body>
 </html>
 ```
+
+**Important Notes:**
+
+- ⚠️ **Required**: `@stack('scripts')` must be present in your layout (before `</body>`)
+- The modal uses `@push('scripts')` to inject JavaScript
+- Without `@stack('scripts')`, the modal buttons won't work
 
 **Alternative: Manual Setup**
 
@@ -116,9 +123,12 @@ If you want to load assets manually:
     <!-- PWA Modal Component -->
     <x-pwa-push-modal />
     
+    <!-- REQUIRED: Scripts stack -->
+    @stack('scripts')
+    
     <!-- Service Worker is auto-registered by the modal component -->
     
-    <!-- OR register service worker manually -->
+    <!-- OR register service worker manually (if not using modal) -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/pwa-push/sw.js')
@@ -432,6 +442,23 @@ composer dump-autoload
 php artisan tinker
 >>> app('blade.compiler')->getClassComponentAliases()['pwa-push-modal'] ?? 'Not found'
 ```
+
+### Modal buttons not working?
+
+**Check if `@stack('scripts')` is in your layout:**
+
+```blade
+<!-- Your layout file (e.g., app.blade.php) -->
+<body>
+    <!-- Your content -->
+    <x-pwa-push-modal />
+    
+    <!-- MUST HAVE THIS: -->
+    @stack('scripts')
+</body>
+```
+
+The modal uses `@push('scripts')` to inject JavaScript. Without `@stack('scripts')`, the Install and Allow Push buttons won't work.
 
 ### Service Worker not registering?
 
