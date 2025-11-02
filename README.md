@@ -61,14 +61,89 @@ This will publish:
 - `/config/pwa-push.php` - Configuration
 - `/database/migrations/` - Database tables
 
-### 3. Add Component to Layout
+### 3. Add Assets to Layout
+
+Add the following to your layout file (e.g., `resources/views/layouts/app.blade.php`):
 
 ```blade
-<!-- In your layout file (e.g., app.blade.php) -->
-<x-pwa-push-modal />
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your App</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/pwa-push/manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- PWA Styles -->
+    <link rel="stylesheet" href="/pwa-push/style.css">
+    
+    <!-- Your other head content -->
+</head>
+<body>
+    <!-- Your page content -->
+    
+    <!-- PWA Push Notification Modal (before closing body tag) -->
+    <x-pwa-push-modal />
+    
+    <!-- OR use the view directly -->
+    {{-- @include('pwa-push::components.modal') --}}
+    
+    <!-- Service Worker Registration (included in modal, no need to add separately) -->
+</body>
+</html>
+```
 
-<!-- OR use the view directly -->
-@include('pwa-push::components.modal')
+**Alternative: Manual Setup**
+
+If you want to load assets manually:
+
+```blade
+<head>
+    <!-- Manifest -->
+    <link rel="manifest" href="/pwa-push/manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- PWA CSS -->
+    <link rel="stylesheet" href="/pwa-push/style.css">
+</head>
+
+<body>
+    <!-- Your content -->
+    
+    <!-- PWA Modal Component -->
+    <x-pwa-push-modal />
+    
+    <!-- Service Worker is auto-registered by the modal component -->
+    
+    <!-- OR register service worker manually -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/pwa-push/sw.js')
+                .then(reg => console.log('Service Worker registered', reg))
+                .catch(err => console.log('Service Worker registration failed', err));
+        }
+    </script>
+</body>
+```
+
+**For Alpine.js Users:**
+
+The modal component uses Alpine.js. If you don't have it installed:
+
+```blade
+<head>
+    <!-- Add Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+```
+
+Or install via npm:
+
+```bash
+npm install alpinejs
 ```
 
 ## Configuration
@@ -283,20 +358,105 @@ public function notifyMatchStarting($match)
 }
 ```
 
+## Testing Installation
+
+### 1. Verify Package is Loaded
+
+```bash
+php artisan about
+# Look for: Pachristo\PwaIpPushNotify\PwaIpPushNotifyServiceProvider
+```
+
+### 2. Check Commands
+
+```bash
+php artisan list pwa-push
+# Should show: pwa-push:install, pwa-push:send, pwa-push:cleanup
+```
+
+### 3. Verify Assets
+
+```bash
+# Check public files
+ls -la public/pwa-push/
+# Should show: manifest.json, sw.js, style.css
+
+# Check config
+ls -la config/pwa-push.php
+
+# Check migrations ran
+php artisan migrate:status | grep push
+```
+
+### 4. Test Component Registration
+
+```bash
+php artisan tinker
+>>> view()->exists('pwa-push::components.modal')
+# Should return: true
+>>> exit
+```
+
+### 5. Test in Browser
+
+1. Visit your app in browser (must be HTTPS or localhost)
+2. Click the "Enable Push Notifications" button
+3. Allow notifications when prompted
+4. Send test notification:
+
+```bash
+php artisan pwa-push:send --title="Test" --body="Hello World!" --all
+```
+
 ## Troubleshooting
 
 ### Notifications not working?
 
-1. Check HTTPS (required for push)
-2. Verify migrations ran: `php artisan migrate:status`
-3. Check subscriptions: `php artisan tinker` → `PushSubscription::count()`
-4. Test VAPID keys exist: `storage/app/push/vapid.json`
+1. **Check HTTPS**: Push notifications require secure context (HTTPS or localhost)
+2. **Verify migrations**: `php artisan migrate:status | grep push`
+3. **Check subscriptions**: `php artisan tinker` → `PushSubscription::count()`
+4. **Test VAPID keys**: `ls storage/app/push/vapid.json`
+5. **Check browser console**: Open DevTools → Console for errors
+6. **Verify service worker**: DevTools → Application → Service Workers
+
+### Component not found error?
+
+```bash
+# Clear all caches
+php artisan config:clear
+php artisan view:clear
+php artisan cache:clear
+composer dump-autoload
+
+# Verify component is registered
+php artisan tinker
+>>> app('blade.compiler')->getClassComponentAliases()['pwa-push-modal'] ?? 'Not found'
+```
+
+### Service Worker not registering?
+
+1. Check browser console for errors
+2. Verify file exists: `public/pwa-push/sw.js`
+3. Must be served over HTTPS (or localhost)
+4. Check scope: Service worker scope is `/`
+
+### Assets not loading?
+
+```bash
+# Re-publish assets
+php artisan vendor:publish --tag=pwa-push --force
+
+# Verify public directory
+ls -la public/pwa-push/
+```
 
 ### Clear cache if needed
 
 ```bash
 php artisan config:clear
+php artisan view:clear
 php artisan cache:clear
+php artisan route:clear
 composer dump-autoload
 ```
 
