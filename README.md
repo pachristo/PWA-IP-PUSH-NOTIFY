@@ -110,11 +110,11 @@ If you want to load assets manually:
 ```blade
 <head>
     <!-- Manifest -->
-    <link rel="manifest" href="/pwa-push/manifest.json">
+    <link rel="manifest" href="/pwa-push/pwa-push/manifest.json">
     <meta name="theme-color" content="#6366f1">
     
     <!-- PWA CSS -->
-    <link rel="stylesheet" href="/pwa-push/style.css">
+    <link rel="stylesheet" href="/pwa-push/pwa-push/style.css">
 </head>
 
 <body>
