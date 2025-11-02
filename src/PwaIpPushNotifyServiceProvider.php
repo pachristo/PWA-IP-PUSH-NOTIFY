@@ -21,10 +21,10 @@ class PwaIpPushNotifyServiceProvider extends ServiceProvider
             );
         }
 
-        
+
 
         $this->publishes([
-            __DIR__.'/../public'       => public_path('pwa-push'),
+            __DIR__.'/../public/pwa-push'       => public_path('pwa-push'),
             __DIR__.'/../resources/views' => resource_path('views/vendor/pwa-push'),
             __DIR__.'/../config/pwa-push.php' => config_path('pwa-push.php'),
             __DIR__.'/../database/migrations' => database_path('migrations'),

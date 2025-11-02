@@ -1,16 +1,18 @@
-<div x-data="{open:false}" x-cloak>
-  <button @click="open=true" class="btn">Enable Push Notifications</button>
+<div class="pwa-pachristo-xloax">
+  <div x-data="{open:false}" x-cloak>
+    <button @click="open=true" class="btn">Enable Push Notifications</button>
 
-  <div x-show="open" class="modal" @click.away="open=false">
-    <div class="card" @click.stop>
-      <div class="header"><h2>PWA Push Notify</h2><a href="#" @click.prevent="open=false" class="close">×</a></div>
-      <div class="body">
-        <p>No login • Offline • IP-based Push</p>
-        <button x-ref="install" @click="install()" id="install-btn">Install</button>
-        <button @click="subscribe()" id="notify-btn">Allow Push</button>
-        <div x-text="msg"></div>
+    <div x-show="open" class="modal" @click.away="open=false">
+      <div class="card" @click.stop>
+        <div class="header"><h2>PWA Push Notify</h2><a href="#" @click.prevent="open=false" class="close">×</a></div>
+        <div class="body">
+          <p>No login • Offline • IP-based Push</p>
+          <button x-ref="install" @click="install()" id="install-btn">Install</button>
+          <button @click="subscribe()" id="notify-btn">Allow Push</button>
+          <div x-text="msg"></div>
+        </div>
+        <div class="footer">Free forever</div>
       </div>
-      <div class="footer">Free forever</div>
     </div>
   </div>
 </div>
