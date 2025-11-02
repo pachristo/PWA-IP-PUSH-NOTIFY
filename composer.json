@@ -1,0 +1,28 @@
+{
+  "name": "pachristo/pwa_ip_push_notify",
+  "description": "Production-ready PWA + IP-based Push Notifications for Laravel",
+ 
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pachristo",
+      "email": "pachriston@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "laravel/framework": "^10.0|^11.0",
+    "minishlink/web-push": "*"
+  },
+  "autoload": {
+    "psr-4": { "Pachristo\\PwaIpPushNotify\\": "src/" }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [ "Pachristo\\PwaIpPushNotify\\PwaIpPushNotifyServiceProvider" ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

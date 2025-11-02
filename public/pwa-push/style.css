@@ -1,0 +1,12 @@
+*{box-sizing:border-box;margin:0;padding:0;font:14px system-ui,sans-serif}
+body{min-height:100vh;background:#f0f2f5;display:flex;align-items:center;justify-content:center}
+.btn{background:#6366f1;color:#fff;padding:12px 24px;border:none;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(99, 102, 241, 0.3);transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:999}
+[x-cloak]{display:none}
+.card{background:#fff;border-radius:16px;max-width:380px;width:90%;box-shadow:0 20px 60px #0003;overflow:hidden}
+.header{background:#6366f1;color:#fff;padding:20px;text-align:center;position:relative}
+.close{position:absolute;right:16px;top:16px;font-size:28px;color:#fff;text-decoration:none}
+.body{padding:24px;text-align:center}
+.footer{background:#f9fafb;padding:12px;font-size:13px;text-align:center}
+#install-btn,#notify-btn{display:none;background:#10b981;color:#fff;padding:10px 20px;border-radius:10px;margin:8px}
