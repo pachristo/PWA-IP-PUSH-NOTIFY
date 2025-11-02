@@ -21,12 +21,16 @@ class PwaIpPushNotifyServiceProvider extends ServiceProvider
             );
         }
 
+        
+
         $this->publishes([
             __DIR__.'/../public'       => public_path('pwa-push'),
             __DIR__.'/../resources/views' => resource_path('views/vendor/pwa-push'),
             __DIR__.'/../config/pwa-push.php' => config_path('pwa-push.php'),
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'pwa-push');
+
+
 
         $this->commands([
             \Pachristo\PwaIpPushNotify\Console\InstallCommand::class,
