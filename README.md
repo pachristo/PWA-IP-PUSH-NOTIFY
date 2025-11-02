@@ -65,7 +65,10 @@ This will publish:
 
 ```blade
 <!-- In your layout file (e.g., app.blade.php) -->
-<x-pwa-push.modal />
+<x-pwa-push-modal />
+
+<!-- OR use the view directly -->
+@include('pwa-push::components.modal')
 ```
 
 ## Configuration
